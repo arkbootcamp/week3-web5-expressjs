@@ -1,18 +1,68 @@
+const { throws } = require('assert')
+const modelProducts = require('../models/products')
 const products = {
     getProducts:(req, res)=>{
-        res.send('mengambil semua data product dengan query search '+ req.query.search)
+        modelProducts.getProduct()
+        .then(result=>{
+            const resultProdcut = result
+            // res.send(resultProdcut)
+            res.json(resultProdcut)
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
     },
     detailProducts:(req, res)=>{
-        res.send('ini router product dengan params '+ req.params.id)
+        const id = req.params.id
+        modelProducts.getProductById(id)
+        .then(result=>{
+            const resultProdcut = result
+            // res.send(resultProdcut)
+            res.json(resultProdcut)
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
     },
     insertProduct: (req, res)=>{
-        res.send('ini user  menggunakan method post dengan router')
+        // const id = req.params.id
+        // console.log(req.body.name)
+        // const name = req.body.name
+        // const description = req.body.description
+        // const price = req.body.price
+        const {name, description, price} = req.body
+
+        const data = {
+            name,
+            description,
+            price,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        }
+        modelProducts.insertProduct(data)
+        .then(result=>{
+            const resultProdcut = result
+            // res.send(resultProdcut)
+            res.json(resultProdcut)
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
     },
     updateProduct: (req, res)=>{
         res.send('ini user  menggunakan method pust login dengan router dan id '+ req.params.id)
     },
     deleteProduct:(req, res)=>{
-        res.send('ini user  menggunakan method delete login dengan router'+req.params.iduser)
+        const id = req.params.iduser
+        modelProducts.deleteProduct(id)
+        .then(result=>{
+            const resultProdcut = result
+            // res.send(resultProdcut)
+            res.json(resultProdcut)
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
     }
 }
 

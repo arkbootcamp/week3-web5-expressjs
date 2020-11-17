@@ -4,7 +4,7 @@ const productController = require('../controllers/products')
 router
     .get('/', productController.getProducts)
     .get('/:id', productController.detailProducts)
-    .post('/', productController.updateProduct)
+    .post('/', productController.insertProduct)
     .put('/:id', productController.updateProduct)
-    .delete('/:iduser', productController.updateProduct)
+    .delete('/:iduser', productController.deleteProduct)
 module.exports = router
