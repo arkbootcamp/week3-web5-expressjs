@@ -1,12 +1,12 @@
 const modelProducts = require('../models/products')
-const hellper = require('../hellpers/hellpers')
+const helper = require('../helpers/helpers')
 const products = {
     getProducts:(req, res)=>{
         modelProducts.getProduct()
         .then(result=>{
             const resultProdcut = result
             // res.send(resultProdcut)
-            hellper.response(res, resultProdcut, 200, null)
+            helper.response(res, resultProdcut, 200, null)
             // res.json(resultProdcut)
         })
         .catch((err)=>{
@@ -19,7 +19,7 @@ const products = {
         .then(result=>{
             const resultProdcut = result
             // res.send(resultProdcut)
-            hellper.response(res, resultProdcut, 200, null)
+            helper.response(res, resultProdcut, 200, null)
         })
         .catch((err)=>{
             console.log(err)
@@ -38,7 +38,7 @@ const products = {
         .then(result=>{
             const resultProdcut = result
             // res.send(resultProdcut)
-            hellper.response(res, resultProdcut, 201, null)
+            helper.response(res, resultProdcut, 201, null)
         })
         .catch((err)=>{
             console.log(err)
@@ -58,7 +58,7 @@ const products = {
         .then((result)=>{
             const dataResult = result
             dataResult.hello = "helo world"
-            hellper.response(res, dataResult, 200, null)
+            helper.response(res, dataResult, 200, null)
         })
         .catch((error)=>{
             console.log(error)
@@ -84,8 +84,7 @@ const products = {
         modelProducts.updateProduct(id, data)
         .then((result)=>{
             const dataResult = result
-            dataResult.hello = "helo world"
-            hellper.response(res, dataResult, 200, null)
+            helper.response(res, dataResult, 200, null)
         })
         .catch((error)=>{
             console.log(error)
@@ -96,7 +95,7 @@ const products = {
         modelProducts.deleteProduct(id)
         .then(result=>{
             const resultProdcut = result
-            hellper.response(res, resultProdcut, 200, null)
+            helper.response(res, resultProdcut, 200, null)
         })
         .catch((err)=>{
             console.log(err)
