@@ -1,8 +1,9 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
 const router = express.Router()
-const PORT = 4000
+const PORT = process.env.PORT
 const routerUsers = require('./src/routers/users')
 const routerProducts = require('./src/routers/products')
 const bodyParser = require('body-parser')
@@ -18,7 +19,7 @@ const mymiddleware = (req, res, next) =>{
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
- 
+
 // parse application/json
 app.use(bodyParser.json())
 
@@ -28,10 +29,8 @@ app.use(morgan('dev'))
 // add mymiddleware
 app.use(mymiddleware)
 
-
 // menenggukan router
 app.use('/users',routerUsers)
 app.use('/products', routerProducts)
-
 
 app.listen(PORT, ()=> console.log(`server is running port ${PORT}`))

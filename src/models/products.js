@@ -14,7 +14,7 @@ const products = {
     },
     getProductById: (id)=>{
         return new Promise((resolve, reject)=>{
-            connection.query("SELECT * FROM products WHERE id = ?", id,(error, results)=>{
+            connection.query(`SELECT * FROM products WHERE id = ?`, id, (error, results)=>{
                 if(!error){
                     resolve(results)
                 }else{
@@ -45,6 +45,17 @@ const products = {
             })
         })
     },
+    updateProduct: (id, data)=>{
+        return new Promise((resolve, reject)=>{
+            connection.query("UPDATE products SET ? WHERE id=?",[data, id], (error, results)=>{
+                if (!error){
+                    resolve(results)
+                }else{
+                    reject(error)
+                }
+            })
+        })
+    }
 }
 
 module.exports = products
