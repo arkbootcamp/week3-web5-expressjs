@@ -3,9 +3,12 @@ const helper = require('../helpers/helpers')
 const products = {
   getProducts: (req, res) => {
     const name = req.query.name || null
+    const page = req.query.page || 1
+    const limit = req.query.limit || 3
+    const offset = (page - 1) * limit
     console.log(name)
 
-    modelProducts.getProduct(name)
+    modelProducts.getProduct(name, offset, limit)
       .then(result => {
         const resultProdcut = result
         // res.send(resultProdcut)
@@ -42,11 +45,12 @@ const products = {
       })
   },
   insertProduct: (req, res) => {
-    const { name, description, price } = req.body
+    const { name, description, price, id_category } = req.body
     const data = {
       name,
       description,
       price,
+      id_category,
       createdAt: new Date(),
       updatedAt: new Date()
     }

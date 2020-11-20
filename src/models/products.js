@@ -1,10 +1,10 @@
 const connection = require('../configs/db')
 
 const products = {
-  getProduct: (name) => {
+  getProduct: (name, offset, limit) => {
     return new Promise((resolve, reject) => {
       if (name) {
-        connection.query('SELECT * FROM products where name LIKE ?', `%${name}%`, (error, results) => {
+        connection.query(`SELECT products.*, category.name AS name_category FROM products INNER JOIN category ON products.id_category = category.id where products.name LIKE ? LIMIT ${limit} OFFSET ${offset}`, `%${name}%`, (error, results) => {
           if (!error) {
             resolve(results)
           } else {
@@ -12,7 +12,7 @@ const products = {
           }
         })
       } else {
-        connection.query('SELECT * FROM products', (error, results) => {
+        connection.query('SELECT products.*, category.name AS name_category FROM products INNER JOIN category ON products.id_category = category.id', (error, results) => {
           if (!error) {
             resolve(results)
           } else {
