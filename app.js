@@ -9,7 +9,7 @@ const routerUsers = require('./src/routers/users')
 const routerProducts = require('./src/routers/products')
 const bodyParser = require('body-parser')
 const helper = require('./src/helpers/helpers')
-
+const routes = require('./src/routers/index')
 // membuat middleware
 const mymiddleware = (req, res, next) => {
   console.log('menjalan my middleware')
@@ -38,17 +38,20 @@ app.use(morgan('dev'))
 // add mymiddleware
 app.use(mymiddleware)
 
-// menenggukan router
-app.use('/users', routerUsers)
-app.use('/products', routerProducts)
+// router menggukan versi
+app.use('/v1', routes)
+app.use('/upload', express.static('./upload'))
+// url not fount
+app.use('*', (req, res, next) => {
+// res.json()
+const error = new Error('URL Not Found')
+error.status = 400
+  return next(error)
+})
 
 // error handling
 app.use((err, req, res, next) => {
   helper.response(res, null, err.status, { message: err.message })
   // console.log("bla bla bla bla")
-})
-app.use('*', (req, res) => {
-// res.json()
-  helper.response(res, null, 404, { message: 'URL Not Found' })
 })
 app.listen(PORT, () => console.log(`server is running port ${PORT}`))

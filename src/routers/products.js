@@ -1,15 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const productController = require('../controllers/products')
-const cobamiddleware = (req, res, next) => {
-  console.log('saya menjalankan middleware di router')
-  // res.send('hello')
-  next()
-}
+const { verifyAccess} = require('../middlewares/auth')
+const {uploadMulter} = require('../middlewares/upload')
+
 router
-  .get('/', cobamiddleware, productController.getProducts)
-  .get('/:id', productController.detailProducts)
-  .post('/', productController.insertProduct)
-  .patch('/:id', productController.updateProduct)
-  .delete('/:iduser', productController.deleteProduct)
+  .get('/', verifyAccess, productController.getProducts)
+  .get('/:id', verifyAccess, productController.detailProducts)
+  .post('/', uploadMulter.single('image'), productController.insertProduct)
+  .patch('/:id', verifyAccess, productController.updateProduct)
+  .delete('/:iduser', verifyAccess, productController.deleteProduct)
+
 module.exports = router

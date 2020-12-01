@@ -1,22 +1,22 @@
 const modelProducts = require('../models/products')
 const helper = require('../helpers/helpers')
+const createError = require('http-errors')
 const products = {
-  getProducts: (req, res) => {
+  getProducts: (req, res, next) => {
     const name = req.query.name || null
     const page = req.query.page || 1
     const limit = req.query.limit || 3
     const offset = (page - 1) * limit
-    console.log(name)
-
+    const idSaya = req.userSaya
+    console.log(idSaya)
     modelProducts.getProduct(name, offset, limit)
       .then(result => {
         const resultProdcut = result
-        // res.send(resultProdcut)
         helper.response(res, resultProdcut, 200, null)
-        // res.json(resultProdcut)
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
+        const error = createError.InternalServerError("data bla bla")
+        return next(error)
       })
   },
   detailProducts: (req, res, next) => {
@@ -51,6 +51,7 @@ const products = {
       description,
       price,
       id_category,
+      image: `${process.env.BASE_URL}/upload/${req.file.filename}`,
       createdAt: new Date(),
       updatedAt: new Date()
     }
@@ -81,7 +82,7 @@ const products = {
         helper.response(res, dataResult, 200, null)
       })
       .catch((error) => {
-        console.log(error)
+        return next(error)
       })
   },
   updateProduct2: (req, res) => {
