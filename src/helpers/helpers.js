@@ -1,3 +1,4 @@
+const connection = require('../configs/db')
 module.exports = {
   response: (res, result, status, err) => {
     const resultPrint = {
@@ -11,5 +12,18 @@ module.exports = {
   },
   auht: () => {
 
+  },
+  actionQuery:(...arg) =>{
+    const arrray =[...arg]
+    console.log(arg)
+    return new Promise((resolve, reject) => {
+      connection.query(...arg, (error, results) => {
+        if (!error) {
+          resolve(results)
+        } else {
+          reject(error)
+        }
+      })
+    })
   }
 }

@@ -3,6 +3,8 @@ const helper = require('../helpers/helpers')
 const {checkUser, insertUser} = require('../models/users')
 const jwt = require('jsonwebtoken')
 const { v4: uuidv4 } = require('uuid');
+const {sendEmail} = require('../helpers/email')
+
 
 exports.loginUser = (req, res) =>{
 const {email, password} = req.body
@@ -65,4 +67,19 @@ exports.registerUser = (req, res) => {
   })
 
   
+}
+exports.sendEmail= (req, res) => {
+  const email = req.body.email
+  const message = req.body.message
+  sendEmail(email, message)
+  .then((res)=>{
+    console.log(res)
+    // return helper.response(res, { id: res.messageId}, 200, null)
+    return helper.response(res, {message: 'send email success'}, 500,null)
+  })
+  .catch((err)=>{
+    return helper.response(res, null, 500, {
+      message: 'error send email'
+    })
+  })
 }

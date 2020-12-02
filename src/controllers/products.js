@@ -1,18 +1,26 @@
 const modelProducts = require('../models/products')
 const helper = require('../helpers/helpers')
 const createError = require('http-errors')
+const {pagination} = require('../helpers/pagination')
+const redis = require("redis");
+const client = redis.createClient(6379);
+
 const products = {
-  getProducts: (req, res, next) => {
+  getProducts: async(req, res, next) => {
     const name = req.query.name || null
-    const page = req.query.page || 1
-    const limit = req.query.limit || 3
+    const sortData= req.query.sort || 'id'
+    const typeSort = req.query.type || 'ASC'
+    const search = req.query.search
+    const page = parseInt(req.query.page) || 1
+    const limit = parseInt(req.query.limit) || 3
     const offset = (page - 1) * limit
-    const idSaya = req.userSaya
-    console.log(idSaya)
+    // const idSaya = req.userSaya
+    const setPagination = await pagination(limit, page)
     modelProducts.getProduct(name, offset, limit)
       .then(result => {
         const resultProdcut = result
-        helper.response(res, resultProdcut, 200, null)
+        client.setex("getAllProducts", 60*60*12,JSON.stringify(resultProdcut));
+        helper.response(res, { pagination: setPagination, products: resultProdcut}, 200, null)
       })
       .catch(() => {
         const error = createError.InternalServerError("data bla bla")
@@ -35,6 +43,7 @@ const products = {
           return next(error)
           // return helper.response(res, null, 404, error)
         }
+        client.setex("product"+id, 60 * 60 * 12, JSON.stringify(resultProdcut))
         helper.response(res, resultProdcut, 200, null)
       })
       .catch((err) => {

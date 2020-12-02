@@ -50,8 +50,8 @@ error.status = 400
 })
 
 // error handling
-app.use((err, req, res, next) => {
-  helper.response(res, null, err.status, { message: err.message })
-  // console.log("bla bla bla bla")
-})
+// app.use((err, req, res, next) => {
+//   helper.response(res, null, err.status, { message: err.message })
+//   // console.log("bla bla bla bla")
+// })
 app.listen(PORT, () => console.log(`server is running port ${PORT}`))
